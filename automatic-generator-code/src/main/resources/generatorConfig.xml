@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE generatorConfiguration    
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"    
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">  
+<generatorConfiguration>
+	<!-- 加载配置文件 -->
+	<properties resource="host.properties" />
+	
+	<!-- 
+		注意content中的子元素的顺序是不能随意改变的。具体顺序如下：
+		(property*,plugin*,commentGenerator?,(connectionFactory|jdbcConnection),
+		javaTypeResolver?,javaModelGenerator,sqlMapGenerator?,javaClientGenerator?,table+)
+	 -->
+	<context id="generatorContext" targetRuntime="MyBatis3">
+		<!-- 指定生成的java文件的编码,没有直接生成到项目时中文可能会乱码 -->
+		<property name="javaFileEncoding" value="UTF-8"/>
+	
+		<!-- 让生成的实体类（pojo）实现Serializable接口 -->
+		<!-- <plugin type="org.mybatis.generator.plugins.SerializablePlugin" /> -->
+		
+		<!-- 注解的生成配置 -->
+		<commentGenerator type="com.liu.generator.host.CustomCommentGenerator" >
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<!-- <property name="suppressAllComments" value="true"/> -->
+		</commentGenerator>
+		
+		<!-- 数据库连接配置 -->
+		<connectionFactory>
+			<property name="driverClass" value="${datasource.jdbc.driver}"/>
+			<property name="connectionURL" value="${datasource.jdbc.url}"/>
+			<property name="userId" value="${datasource.jdbc.username}"/>
+			<property name="password" value="${datasource.jdbc.password}"/>
+		</connectionFactory>
+		
+		<!-- 类型配置 -->
+		<javaTypeResolver>
+			<!--  默认false，把JDBC DECIMAL和NUMERIC类型解析为 Integer    
+            		  true，把JDBC DECIMAL和NUMERIC类型解析为java.math.BigDecimal      
+        	-->
+			<property name="forceBigDecimals" value="true"/>
+		</javaTypeResolver>
+		
+		<!-- 实体配置。 -->
+		<!-- targetPackage：指定包名
+			 targetProject：指定文件夹
+		 -->
+		<javaModelGenerator targetPackage="${generator.package.model}" targetProject="${generator.target.project.java}">
+			<!-- 是否将根据内省表的目录和架构为对象生成不同的Java包。 -->
+			<property name="enableSubPackages" value="false"/>
+			<!-- 从数据库返回的值被清理前后的空格  -->    
+            <property name="trimStrings" value="true" /> 
+		</javaModelGenerator>
+		
+		<!-- mapper.xml配置 -->
+		<sqlMapGenerator targetPackage="${generator.package.xml}" targetProject="${generator.target.project.resources}">
+			<property name="enableSubPackages" value="false"/>
+		</sqlMapGenerator>
+		
+		<!-- dao层 mapper.java接口配置 -->
+		<javaClientGenerator targetPackage="${generator.package.dao}" type="XMLMAPPER" targetProject="${generator.target.project.java}">
+			<property name="enableSubPackages" value="false"/>
+			<!-- 设置访问权限 -->
+			<property name="exampleMethodVisibility" value="public"/>
+		</javaClientGenerator>
+		
+		<!-- 数据库表设置 -->
+		<table tableName="shop_user" domainObjectName="UserInfoPO"    
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"    
+               enableSelectByExample="false" selectByExampleQueryId="false" >    
+            <property name="useActualColumnNames" value="false"/>    
+        </table> 
+        
+        <!-- 
+        <table tableName="shop_order" domainObjectName="ShopOrder"    
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"    
+               enableSelectByExample="false" selectByExampleQueryId="false" >    
+            <property name="useActualColumnNames" value="false"/>    
+        </table>
+         -->
+	</context>
+</generatorConfiguration>
