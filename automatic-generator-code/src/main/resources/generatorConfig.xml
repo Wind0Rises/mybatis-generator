@@ -30,6 +30,8 @@
 			<property name="connectionURL" value="${datasource.jdbc.url}"/>
 			<property name="userId" value="${datasource.jdbc.username}"/>
 			<property name="password" value="${datasource.jdbc.password}"/>
+			<!-- 如果没有生产关于主键的方法，则把下面配置添加上。  -->
+			<property name="useInformationSchema" value="true"/>
 		</connectionFactory>
 		
 		<!-- 类型配置 -->
@@ -58,9 +60,12 @@
 		
 		<!-- dao层 mapper.java接口配置 -->
 		<javaClientGenerator targetPackage="${generator.package.dao}" type="XMLMAPPER" targetProject="${generator.target.project.java}">
+			 <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
 			<property name="enableSubPackages" value="false"/>
 			<!-- 设置访问权限 -->
 			<property name="exampleMethodVisibility" value="public"/>
+			<!-- 可以为所有生成的接口添加一个父接口，但是MBG只负责生成，不负责检查 -->
+			<property name="rootInterface" value="com.liu.in.MyInterface" />
 		</javaClientGenerator>
 		
 		<!-- 数据库表设置 -->
